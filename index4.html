@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Carousel Sinta Topup</title>
+<style>
+  :root{
+    --bg:#2a002e;           /* latar belakang halaman */
+    --card:#ffebf6;         /* warna dasar slide (untuk fallback) */
+    --accent:#ff8ad6;       /* warna aksen indikator aktif */
+    --radius:22px;          /* sudut membulat */
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    background: radial-gradient(1200px 600px at 20% -10%, #6b104f 0%, transparent 60%),
+                radial-gradient(1000px 500px at 80% 110%, #430c46 0%, transparent 60%),
+                var(--bg);
+    color:#fff;
+  }
+
+  .container{
+    max-width:1100px;
+    margin:48px auto;
+    padding:0 16px;
+  }
+
+  .carousel{
+    position:relative;
+    overflow:hidden;
+    border-radius:var(--radius);
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    background:#140015;
+  }
+
+  /* Track & Slides */
+  .track{
+    position:absolute;
+    inset:0;
+    display:flex;
+    transition:transform .6s ease;
+    will-change:transform;
+  }
+  .slide{
+    position:absolute;
+    min-width:100%;
+    position:relative;
+    background:var(--card);
+    aspect-ratio: 16/6;         /* tinggi responsif; ubah sesuai selera */
+  }
+  .slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    user-select:none;
+    pointer-events:none;
+  }
+
+  /* Arrows */
+  .nav{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:space-between;
+    pointer-events:none; /* biar klik hanya ke tombol */
+    padding:0 10px;
+  }
+  .btn{
+    pointer-events:auto;
+    border:0; outline:none;
+    width:44px; height:44px;
+    border-radius:999px;
+    background:rgba(255,255,255,.18);
+    backdrop-filter: blur(6px);
+    color:#fff;
+    display:grid; place-items:center;
+    cursor:pointer;
+    transition:transform .12s ease, background .2s ease;
+  }
+  .btn:hover{ background:rgba(255,255,255,.28); transform:scale(1.06) }
+  .btn:active{ transform:scale(.96) }
+  .icon{ width:20px; height:20px; }
+
+  /* Dots */
+  .dots{
+    position:absolute;
+    left:50%; transform:translateX(-50%);
+    bottom:12px;
+    display:flex; gap:8px;
+    padding:8px 10px;
+    background:rgba(20,0,21,.35);
+    border-radius:999px;
+    backdrop-filter: blur(6px);
+  }
+  .dot{
+    width:9px; height:9px; border-radius:99px;
+    background:rgba(255,255,255,.55);
+    border:1px solid rgba(255,255,255,.25);
+    cursor:pointer; transition:all .2s ease;
+  }
+  .dot.active{
+    width:26px;
+    background:var(--accent);
+    border-color:transparent;
+  }
+
+  /* Responsif tinggi */
+  @media (max-width: 900px){
+    .slide{ aspect-ratio:16/8.5 }
+  }
+  @media (max-width: 640px){
+    .slide{ aspect-ratio: 16/10 }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="carousel" id="carousel">
+      <div class="track" id="track">
+        <!-- GANTI src gambar sesuai kebutuhan -->
+        <div class="slide">
+          <img src="https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=2000&auto=format&fit=crop" alt="Slide 1"/>
+        </div>
+        <div class="slide">
+          <img src="https://images.unsplash.com/photo-1541560052-77ec1bbc09f7?q=80&w=2000&auto=format&fit=crop" alt="Slide 2"/>
+        </div>
+        <div class="slide">
+          <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=2000&auto=format&fit=crop" alt="Slide 3"/>
+        </div>
+      </div>
+
+      <!-- Panah -->
+      <div class="nav">
+        <button class="btn" id="prev" aria-label="Sebelumnya">
+          <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="btn" id="next" aria-label="Berikutnya">
+          <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <!-- Indikator -->
+      <div class="dots" id="dots" aria-label="Indikator slide"></div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const track = document.getElementById('track');
+  const carousel = document.getElementById('carousel');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const slides = Array.from(track.children);
+  const dotsWrap = document.getElementById('dots');
+
+  let index = 0;
+  let timer = null;
+  const delay = 4200; // ms
+  const last = () => slides.length - 1;
+
+  // Buat dots
+  slides.forEach((_,i)=>{
+    const b=document.createElement('button');
+    b.className='dot'+(i===0?' active':'');
+    b.setAttribute('aria-label','Ke slide '+(i+1));
+    b.addEventListener('click',()=>go(i,true));
+    dotsWrap.appendChild(b);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function update(){
+    track.style.transform = `translateX(-${index*100}%)`;
+    dots.forEach((d,i)=>d.classList.toggle('active', i===index));
+  }
+  function go(i,manual=false){
+    index = (i<0)? last() : (i>last()? 0 : i);
+    update();
+    if(manual) restart();
+  }
+  function nextSlide(){ go(index+1) }
+  function prevSlide(){ go(index-1) }
+  function start(){ timer = setInterval(nextSlide, delay) }
+  function stop(){ clearInterval(timer); timer=null }
+  function restart(){ stop(); start() }
+
+  // Tombol
+  next.addEventListener('click', ()=>go(index+1,true));
+  prev.addEventListener('click', ()=>go(index-1,true));
+
+  // Pause saat hover/focus
+  ['mouseenter','focusin'].forEach(e=>carousel.addEventListener(e, stop));
+  ['mouseleave','focusout'].forEach(e=>carousel.addEventListener(e, start));
+
+  // Keyboard
+  carousel.setAttribute('tabindex','0');
+  carousel.addEventListener('keydown', (e)=>{
+    if(e.key==='ArrowRight') go(index+1,true);
+    if(e.key==='ArrowLeft') go(index-1,true);
+  });
+
+  // Swipe (sentuh)
+  let sx=0, dx=0, isTouch=false;
+  carousel.addEventListener('touchstart', e=>{
+    isTouch=true; sx=e.touches[0].clientX; dx=0; stop();
+  }, {passive:true});
+  carousel.addEventListener('touchmove', e=>{
+    if(!isTouch) return;
+    dx=e.touches[0].clientX - sx;
+    track.style.transform = `translateX(calc(-${index*100}% + ${dx}px))`;
+  }, {passive:true});
+  carousel.addEventListener('touchend', ()=>{
+    isTouch=false;
+    const threshold = 60; // px
+    if(Math.abs(dx)>threshold){
+      if(dx<0) go(index+1,true); else go(index-1,true);
+    }else{
+      update();
+      start();
+    }
+  });
+
+  // Mulai!
+  update(); start();
+})();
+</script>
+</body>
+</html>

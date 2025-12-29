@@ -1,0 +1,404 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Solusi TopUp Murah
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://assets.mangiya.my.id/img/mangiya.id/Logo.png" rel="shortcut icon"/>
+  <style>
+   /* Custom scrollbar for the slider dots container */
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* gaya tombol aktif */
+  .filter-btn.active {
+    background-color: #3a0f3a !important;
+    box-shadow: 0 0 10px rgba(58, 15, 58, 0.6);
+  }
+  .product-item.hide {
+    display: none;
+  }
+
+
+.container{max-width:1100px;margin:48px auto;padding:0 16px}
+
+  .carousel{
+    position:relative;
+    overflow:hidden;
+    height:400px; /* tinggi fix supaya efek coverflow terlihat */
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* Responsive carousel height */
+  @media (max-width: 768px) {
+    .carousel {
+      height: 250px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .carousel {
+      height: 200px;
+    }
+  }
+
+  .slide{
+    position:absolute;
+    width:70%;
+    height:100%;
+    border-radius:var(--radius);
+    overflow:hidden;
+    transition:all .6s ease;
+    box-shadow:0 8px 25px rgba(0,0,0,.4);
+    opacity:0;
+  }
+
+  /* Responsive slide width */
+  @media (max-width: 768px) {
+    .slide {
+      width: 85%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .slide {
+      width: 95%;
+    }
+  }
+
+  .slide img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* posisi */
+  .active{transform:translateX(0) scale(1); opacity:1; z-index:3}
+  .left{transform:translateX(-65%) scale(.7) rotateY(25deg); opacity:.8; z-index:2}
+  .right{transform:translateX(65%) scale(.7) rotateY(-25deg); opacity:.8; z-index:2}
+  .hidden{opacity:0; pointer-events:none; z-index:1}
+
+  /* Responsive transforms for mobile */
+  @media (max-width: 768px) {
+    .left{transform:translateX(-75%) scale(.65) rotateY(20deg); opacity:.6;}
+    .right{transform:translateX(75%) scale(.65) rotateY(-20deg); opacity:.6;}
+  }
+
+  /* Panah */
+  .nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;pointer-events:none;padding:0 10px}
+  .btn{
+    pointer-events:auto;border:0;outline:none;width:44px;height:44px;
+    border-radius:999px;background:rgba(255,255,255,.18);
+    backdrop-filter:blur(6px);color:#fff;display:grid;place-items:center;
+    cursor:pointer;transition:transform .12s ease,background .2s ease;
+  }
+
+  /* Responsive button size */
+  @media (max-width: 480px) {
+    .btn {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .btn:hover{background:rgba(255,255,255,.28);transform:scale(1.06)}
+  .btn:active{transform:scale(.96)}
+  .icon{width:20px;height:20px}
+
+  @media (max-width: 480px) {
+    .icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  /* Dots */
+  .dots{
+    position:absolute;left:50%;transform:translateX(-50%);
+    bottom:12px;display:flex;gap:8px;
+    padding:8px 10px;background:rgba(20,0,21,.35);
+    border-radius:999px;backdrop-filter:blur(6px);
+  }
+
+  @media (max-width: 480px) {
+    .dots {
+      gap: 6px;
+      padding: 6px 8px;
+    }
+  }
+
+  .dot{width:9px;height:9px;border-radius:99px;background:rgba(255,255,255,.55);
+    border:1px solid rgba(255,255,255,.25);cursor:pointer;transition:all .2s ease}
+  .dot.active{width:26px;background:var(--accent);border-color:transparent}
+
+  @media (max-width: 480px) {
+    .dot {
+      width: 7px;
+      height: 7px;
+    }
+    .dot.active {
+      width: 20px;
+    }
+  }
+
+  /* Hamburger menu */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 4px;
+  }
+
+  .hamburger span {
+    width: 24px;
+    height: 3px;
+    background-color: #000;
+    transition: all 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    .hamburger {
+      display: flex;
+    }
+  }
+
+  /* Hide desktop nav on mobile */
+  @media (max-width: 768px) {
+    .desktop-nav {
+      display: none !important;
+    }
+  }
+
+  </style>
+ </head>
+ <body class="bg-[#ffe538] font-sans">
+  <!-- Header -->
+<header class="border-b border-gray-200 bg-[#ffe538]">
+  <div class="max-w-7xl mx-auto flex items-center justify-between h-16 px-4">
+    <!-- Logo -->
+    <div class="flex items-center space-x-2 md:space-x-3">
+      <img src="https://assets.mangiya.my.id/img/mangiya.id/Logo.png" width="50" height="50" class="w-10 h-10 md:w-14 md:h-14"/>
+      <a class="text-lg md:text-xl font-extrabold text-black" href="https://mangiya.id">
+        mangiya
+        <span class="text-[#f3903d]">.id</span>
+      </a>
+    </div>
+
+    <!-- Navigasi kiri - Desktop only -->
+    <nav class="desktop-nav hidden md:flex space-x-4 lg:space-x-7 text-xs lg:text-sm font-normal text-black ml-4 lg:ml-10">
+      <a class="hover:underline flex items-center gap-1" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+       <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg><span class="hidden lg:inline">Cek Transaksi</span></a>
+      <a class="hover:underline flex items-center gap-1" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
+         <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+           <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+           </svg><span class="hidden lg:inline">Calculator ML</span></a>
+      <a class="hover:underline flex items-center gap-1" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trophy" viewBox="0 0 16 16">
+           <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5q0 .807-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33 33 0 0 1 2.5.5m.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935m10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935M3.504 1q.01.775.056 1.469c.13 2.028.457 3.546.87 4.667C5.294 9.48 6.484 10 7 10a.5.5 0 0 1 .5.5v2.61a1 1 0 0 1-.757.97l-1.426.356a.5.5 0 0 0-.179.085L4.5 15h7l-.638-.479a.5.5 0 0 0-.18-.085l-1.425-.356a1 1 0 0 1-.757-.97V10.5A.5.5 0 0 1 9 10c.516 0 1.706-.52 2.57-2.864.413-1.12.74-2.64.87-4.667q.045-.694.056-1.469z"/>
+           </svg><span class="hidden lg:inline">LeaderBoard</span></a>
+    </nav>
+
+    <!-- Bagian kanan -->
+    <div class="flex items-center space-x-2 md:space-x-3 ml-auto">
+      <!-- Hamburger menu - Mobile only -->
+      <div class="hamburger md:hidden" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <!-- Tombol Masuk -->
+      <a 
+        class="bg-[#f3903d] border border-gray-300 text-white rounded px-3 md:px-4 py-1 text-xs md:text-sm font-semibold 
+               hover:text-white hover:border hover:border-black hover:bg-[#ffe538] hover:trasparent"
+        type="button" href="https://login.mangiya.id">
+        Masuk
+      </a>
+    </div>
+  </div>
+ 
+ <!-- Menu Mobile -->
+  <div id="mobile-menu" class="md:hidden hidden flex-col space-y-3 p-4 bg-[#ffe538] border-t border-gray-200">
+    <a class="hover:underline flex items-center" href="#">Cek Transaksi</a>
+    <a class="hover:underline flex items-center" href="#">Calculator ML</a>
+    <a class="hover:underline flex items-center" href="#">LeaderBoard</a>
+    <a class="hover:underline flex items-center" href="#">Cari Produk</a>
+  </div>
+</header>
+
+<section class="max-h-[3280px] bg-[#f3903d]">
+  <!-- Blue background container -->
+  <div class="container">
+  <div class="carousel" id="carousel">
+    <div class="slide"><img src="https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=2000&auto=format&fit=crop"></div>
+    <div class="slide"><img src="https://images.unsplash.com/photo-1541560052-77ec1bbc09f7?q=80&w=2000&auto=format&fit=crop"></div>
+    <div class="slide"><img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=2000&auto=format&fit=crop"></div>
+  </div>
+  <div class="nav">
+    <button class="btn" id="prev"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="btn" id="next"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+  <div class="dots" id="dots"></div>
+</div>
+</section>
+
+  <!-- Search and category container -->
+  <section class="bg-[#f5f6ff] py-4 md:py-6">
+   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-lg">
+    <div class="flex flex-wrap justify-between items-center gap-3 md:gap-4 bg-[#f5f6ff] rounded-lg border border-gray-300 px-3 md:px-4 py-3 md:py-4">
+     <!-- Categories -->
+     <div class="flex flex-wrap gap-2 md:gap-4 justify-center w-full md:w-auto">
+      <!-- Hotel -->
+      <button class="flex flex-col items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-lg border-2 border-blue-700 bg-[#f5f6ff] p-1 md:p-2 text-blue-700 font-semibold text-xs">
+       <div class="bg-[#f5f6ff] rounded-full p-2 md:p-3 mb-1 flex items-center justify-center" style="box-shadow: inset 0 0 0 2px #f5f6ff, 0 0 0 2px #1e40af;">
+        <img alt="Icon of a hotel building with stars" class="w-6 h-6 md:w-8 md:h-8" height="32" src="https://storage.googleapis.com/a1aa/image/d78dcb13-9aa3-4754-f3c5-104aa691bc28.jpg" width="32"/>
+       </div>
+       Hotel
+      </button>
+      <!-- Kereta Api -->
+      <button class="flex flex-col items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-lg border border-gray-300 bg-[#f5f6ff] p-1 md:p-2 text-blue-700 font-semibold text-xs">
+       <div class="bg-[#f5f6ff] rounded-full p-2 md:p-3 mb-1 flex items-center justify-center">
+        <img alt="Icon of a train carriage" class="w-6 h-6 md:w-8 md:h-8" height="32" src="https://storage.googleapis.com/a1aa/image/30b6187f-5466-4dc5-b853-40f0c3df48ec.jpg" width="32"/>
+       </div>
+       <span class="hidden md:inline">Kereta Api</span>
+       <span class="md:hidden">Kereta</span>
+      </button>
+      <!-- Pesawat -->
+      <button class="flex flex-col items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-lg border border-gray-300 bg-[#f5f6ff] p-1 md:p-2 text-blue-700 font-semibold text-xs">
+       <div class="bg-[#f5f6ff] rounded-full p-2 md:p-3 mb-1 flex items-center justify-center">
+        <img alt="Icon of an airplane" class="w-6 h-6 md:w-8 md:h-8" height="32" src="https://storage.googleapis.com/a1aa/image/b5189335-3e29-451d-06f3-3835a04a5ca6.jpg" width="32"/>
+       </div>
+       Pesawat
+      </button>
+      <!-- Listrik -->
+      <button class="flex flex-col items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-lg border border-gray-300 bg-[#f5f6ff] p-1 md:p-2 text-blue-700 font-semibold text-xs">
+       <div class="bg-[#f5f6ff] rounded-full p-2 md:p-3 mb-1 flex items-center justify-center">
+        <img alt="Icon of a light bulb representing electricity" class="w-6 h-6 md:w-8 md:h-8" height="32" src="https://storage.googleapis.com/a1aa/image/956b50c2-2859-4ba8-c64f-a0b206803f8a.jpg" width="32"/>
+       </div>
+       Listrik
+      </button>
+      <!-- Promo -->
+      <button class="flex flex-col items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-lg border border-gray-300 bg-[#f5f6ff] p-1 md:p-2 text-blue-700 font-semibold text-xs">
+       <div class="bg-[#f5f6ff] rounded-full p-2 md:p-3 mb-1 flex items-center justify-center">
+        <img alt="Icon of a shopping bag with percent sign" class="w-6 h-6 md:w-8 md:h-8" height="32" src="https://storage.googleapis.com/a1aa/image/903267e2-7e4f-499d-0302-6bc393ca4744.jpg" width="32"/>
+       </div>
+       Promo
+      </button>
+      <!-- Group Booking -->
+      <button class="flex flex-col items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-lg border border-gray-300 bg-[#f5f6ff] p-1 md:p-2 text-blue-700 font-semibold text-xs">
+       <div class="bg-[#f5f6ff] rounded-full p-2 md:p-3 mb-1 flex items-center justify-center">
+        <img alt="Icon of three people representing group booking" class="w-6 h-6 md:w-8 md:h-8" height="32" src="https://storage.googleapis.com/a1aa/image/7099fb27-5ee3-495c-9408-21cca524e4a8.jpg" width="32"/>
+       </div>
+       <span class="hidden md:inline">Group Booking</span>
+       <span class="md:hidden">Group</span>
+      </button>
+     </div>
+     <!-- Search text -->
+     <div class="text-center md:text-right max-w-xs flex-1 min-w-[180px] w-full md:w-auto">
+      <p class="text-sm md:text-base text-gray-900 font-normal">
+       Cari Hotel?
+      </p>
+      <p class="text-base md:text-lg font-extrabold text-gray-900 leading-tight">
+       Murah dengan Harga Promo
+      </p>
+     </div>
+    </div>
+    <!-- Search input -->
+    <form class="mt-4 md:mt-6 max-w-4xl mx-auto">
+     <label class="sr-only" for="search">
+      Search location
+     </label>
+     <div class="relative rounded-md shadow-sm">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+       <i class="fas fa-search text-base md:text-lg">
+       </i>
+      </div>
+      <input autocomplete="off" class="block w-full rounded-md border border-gray-300 pl-10 pr-4 py-2 md:py-3 text-sm md:text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600" id="search" name="search" placeholder="Jakarta" type="text"/>
+     </div>
+    </form>
+   </div>
+  </section>
+
+  <!-- Flash Sale Section -->
+<section class="px-4 sm:px-6 md:px-10 lg:px-14 mt-4 md:mt-6 max-w-7xl mx-auto bg-[#ffe538]">
+<div class="flex items-center space-x-2 mb-1">
+<span class="text-yellow-400 text-base md:text-lg font-semibold">
+⚡
+</span>
+<span class="uppercase font-semibold tracking-widest text-white text-base md:text-lg">
+ flashsale
+</span>
+<div class="flex space-x-1">
+<div class="bg-red-600 rounded-sm w-6 h-6 md:w-7 md:h-7 flex items-center justify-center font-mono font-bold text-white text-base md:text-lg">
+ 0
+</div>
+<div class="bg-red-600 rounded-sm w-6 h-6 md:w-7 md:h-7 flex items-center justify-center font-mono font-bold text-white text-base md:text-lg">
+ 0
+</div>
+<div class="bg-red-600 rounded-sm w-6 h-6 md:w-7 md:h-7 flex items-center justify-center font-mono font-bold text-white text-base md:text-lg">
+0
+</div>
+<div class="bg-red-600 rounded-sm w-6 h-6 md:w-7 md:h-7 flex items-center justify-center font-mono font-bold text-white text-base md:text-lg">
+0
+</div>
+<div class="bg-red-600 rounded-sm w-6 h-6 md:w-7 md:h-7 flex items-center justify-center font-mono font-bold text-white text-base md:text-lg">
+0
+</div>
+<div class="bg-red-600 rounded-sm w-6 h-6 md:w-7 md:h-7 flex items-center justify-center font-mono font-bold text-white text-base md:text-lg">
+0
+</div>
+</div>
+</div>
+<p class="text-xs text-white mb-3 md:mb-4">
+Pesan sekarang! Persediaan terbatas.
+</p>
+<!-- Flash Sale Card -->
+<div class="relative bg-gradient-to-tr from-[#f3903d] to-[#ff5f6d] rounded-lg p-3 md:p-4 flex items-center max-w-md bg-[#ffe538]">
+<img alt="Blue card icon representing Honor Of Kings 240 Token" class="w-12 h-12 md:w-14 md:h-14 rounded" height="60" src="https://storage.googleapis.com/a1aa/image/38119924-2e83-4f7d-bbc2-8e63421c81a7.jpg" width="60"/>
+<div class="ml-3 md:ml-4 flex flex-col text-white text-xs md:text-sm font-semibold">
+<span>
+Honor Of Kings 240 Token
+</span>
+<span class="text-sm md:text-base font-bold">
+Rp 38.000
+</span>
+<span class="text-xs line-through text-red-600 mt-1 font-normal">
+Rp 39.999
+</span>
+</div>
+<div class="absolute top-0 right-0 bg-blue-600 text-white text-xs font-semibold px-2 py-1 rotate-45 origin-top-right" style="width: 100px; margin-top: 10px; margin-right: -25px;">
+HEMAT Rp 1.999
+</div>
+</div>
+</section>
+
+<!-- Populer Section -->
+<section class="px-4 sm:px-6 md:px-10 lg:px-14 mt-6 md:mt-8 max-w-7xl mx-auto">
+<h2 class="flex items-center text-white font-semibold text-base md:text-lg mb-3 md:mb-4">
+<span class="text-yellow-400 mr-2 text-lg md:text-xl">
+⭐
+</span>
+POPULER
+</h2>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+<!-- Card 1 -->
+<div class="flex bg-gradient-to-tr from-[#f3903d] to-[#ff5f6d] rounded-lg overflow-hidden">
+<img alt="Image of Honor of Kings game character with pink background and sparkles" class="w-16 h-16 md:w-20 md:h-20 object-cover" height="80" src="https://storage.googleapis.com/a1aa/image/0fdfaec2-7ee9-4da8-c56c-5f105b940fc8.jpg" width="80"/>
+<div class="p-2 md:p-3 flex flex-col justify-center text-white text-xs md:text-sm font-semibold">
+<span>
+Honor of Kings
+</span>
+<span class="text-yellow-300 font-bold text-xs mt-1">
+Timi
+</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="flex bg-gradient-to-tr from-[#f3903d] to-[#ff5f6d] rounded-lg overflow-hidden">
+<img alt="Image of Mobile Legends game characters with pink background and sparkles" class="w-16 h-16 md:w-20 md:h-20 object-cover" height="80" src="https://storage.googleapis.com/a1aa/image/710c792e-f5f2-40b0-53f

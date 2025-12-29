@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transform + Bounce Animation</title>
+<style>
+  body {
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .box {
+    width: 80px;
+    height: 80px;
+    background: violet;
+    margin: 10px;
+    transition: 2s;
+    animation: updown 2s infinite alternate ease-in-out;
+  }
+
+  /* Animasi naik-turun */
+  @keyframes updown {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50px); }
+  }
+
+  /* Hover Effects */
+  .box1:hover { transform: translateX(100px); }
+  .box2:hover { transform: rotate(360deg); }
+  .box3:hover { transform: rotateX(360deg); }
+  .box4:hover { transform: rotateY(360deg); }
+  .box5:hover { transform: scaleX(1.5); }
+  .box6:hover { transform: scale(1.3); }
+</style>
+</head>
+<body>
+
+  <div class="box box1"></div>
+  <div class="box box2"></div>
+  <div class="box box3"></div>
+  <div class="box box4"></div>
+  <div class="box box5"></div>
+  <div class="box box6"></div>
+
+</body>
+</html>

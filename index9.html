@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotating Shape Slide</title>
+    <style>
+        body {
+            background: #2a002e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .slide-container {
+            position: relative;
+            width: 600px;
+            /* sesuaikan dengan lebar slide */
+            height: 300px;
+            /* sesuaikan dengan tinggi slide */
+            overflow: hidden;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #4a00e0, #ff00cc);
+        }
+
+        .shape {
+            position: absolute;
+            bottom: -100px;
+            /* mulai dari bawah layar */
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 192, 203, 0.8);
+            border-radius: 20px;
+            transform: translateX(-50%);
+            animation: moveUp 6s linear infinite;
+        }
+
+        @keyframes moveUp {
+            0% {
+                transform: translate(-50%, 0) rotate(0deg);
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -400px) rotate(720deg);
+                /* naik + putar */
+                opacity: 0;
+                /* hilang di atas */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="slide-container">
+        <div class="shape"></div>
+    </div>
+
+</body>
+
+</html>

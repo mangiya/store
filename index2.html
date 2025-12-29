@@ -1,0 +1,72 @@
+<style>
+  /* gaya tombol aktif */
+  .filter-btn.active {
+    background-color: #3a0f3a !important;
+    box-shadow: 0 0 10px rgba(58, 15, 58, 0.6);
+  }
+  .product-item.hide {
+    display: none;
+  }
+</style>
+
+<!-- Filter -->
+<div class="mt-6 flex flex-wrap gap-3 max-w-4xl">
+  <button class="filter-btn bg-[#2a1a2a] text-white text-xs rounded-full px-4 py-1 font-semibold transition" data-filter="game">
+    Game Mobile
+  </button>
+
+  <button class="filter-btn bg-[#2a1a2a] text-white text-xs rounded-full px-4 py-1 font-semibold transition" data-filter="akun">
+    Akun ML Sultan
+  </button>
+
+  <button class="filter-btn bg-[#2a1a2a] text-white text-xs rounded-full px-4 py-1 font-semibold transition" data-filter="joki">
+    Jasa Joki MLBB
+  </button>
+
+  <button class="filter-btn bg-[#2a1a2a] text-white text-xs rounded-full px-4 py-1 font-semibold transition" data-filter="pulsa">
+    Pulsa
+  </button>
+</div>
+
+<!-- Produk -->
+<div class="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4" id="product-list">
+  <div class="product-item bg-gray-200 p-4 rounded-lg" data-category="game">Diamond Mobile Legends</div>
+  <div class="product-item bg-gray-200 p-4 rounded-lg" data-category="akun">Akun ML Sultan Rank Mythic</div>
+  <div class="product-item bg-gray-200 p-4 rounded-lg" data-category="joki">Joki Push Rank Mythic</div>
+  <div class="product-item bg-gray-200 p-4 rounded-lg" data-category="pulsa">Pulsa Telkomsel</div>
+</div>
+
+<script>
+const filterBtns = document.querySelectorAll(".filter-btn");
+const products = document.querySelectorAll(".product-item");
+
+// fungsi untuk set filter
+function setFilter(filter, btn) {
+  // reset tombol
+  filterBtns.forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  // filter produk
+  products.forEach(product => {
+    if (product.getAttribute("data-category") === filter) {
+      product.classList.remove("hide");
+    } else {
+      product.classList.add("hide");
+    }
+  });
+}
+
+// pas load → pilih tombol pertama sebagai default active
+window.addEventListener("DOMContentLoaded", () => {
+  const firstBtn = filterBtns[0];
+  setFilter(firstBtn.getAttribute("data-filter"), firstBtn);
+});
+
+// event klik tombol filter
+filterBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const filter = btn.getAttribute("data-filter");
+    setFilter(filter, btn);
+  });
+});
+</script>

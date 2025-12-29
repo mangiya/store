@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rotating Floating Shapes</title>
+<style>
+  body {
+    background: #2a002e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .slide-container {
+    position: relative;
+    width: 600px;   /* lebar slide */
+    height: 300px;  /* tinggi slide */
+    overflow: hidden;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #4a00e0, #ff00cc);
+  }
+
+  .shape {
+    position: absolute;
+    bottom: -120px;
+    left: 50%;
+    background: rgba(255, 192, 203, 0.8);
+    border-radius: 20px;
+    transform: translateX(-50%);
+    animation: moveUp 6s linear infinite;
+  }
+
+  /* Variasi ukuran */
+  .small { width: 50px; height: 50px; }
+  .medium { width: 80px; height: 80px; }
+  .large { width: 120px; height: 120px; }
+
+  /* Animasi naik + putar */
+  @keyframes moveUp {
+    0% {
+      transform: translate(-50%, 0) rotate(0deg);
+      opacity: 1;
+    }
+    80% { opacity: 1; }
+    100% {
+      transform: translate(-50%, -400px) rotate(720deg);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="slide-container">
+    <div class="shape small" style="animation-delay: 0s;"></div>
+    <div class="shape medium" style="animation-delay: 1.5s;"></div>
+    <div class="shape large" style="animation-delay: 3s;"></div>
+    <div class="shape small" style="animation-delay: 4.5s;"></div>
+    <div class="shape medium" style="animation-delay: 6s;"></div>
+    <div class="shape large" style="animation-delay: 7.5s;"></div>
+    <div class="shape small" style="animation-delay: 9s;"></div>
+    <div class="shape medium" style="animation-delay: 10.5s;"></div>
+    <div class="shape large" style="animation-delay: 12s;"></div>
+    <div class="shape small" style="animation-delay: 13.5s;"></div>
+  </div>
+
+</body>
+</html>
